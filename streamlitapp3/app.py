@@ -3,52 +3,48 @@ import pandas as pd
 import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
+import os
 
-# Title
-st.title("Iris Flower Prediction")
+st.title("Iris Flower Prediction with Accuracy & Confusion Matrix")
 
-# Load dataset
-data = pd.read_csv("Iris.csv")
+# Load dataset safely
+file_path = os.path.join(os.path.dirname(__file__), "Iris.csv")
+data = pd.read_csv(file_path)
 
-# Features and target
 X = data.drop(["Id","Species"], axis=1)
 y = data["Species"]
 
-# Split dataset
+# Split data
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# Load trained model
-model = pickle.load(open("model.pkl","rb"))
+# Load trained model safely
+model_path = os.path.join(os.path.dirname(__file__), "model.pkl")
+model = pickle.load(open(model_path, "rb"))
 
-# Predict test data
+# Predict on test data
 y_pred = model.predict(X_test)
 
-# Accuracy
+# Calculate metrics
 accuracy = accuracy_score(y_test, y_pred)
-
-# Confusion matrix
 cm = confusion_matrix(y_test, y_pred)
 
-# Show accuracy
+# Display metrics
 st.subheader("Model Accuracy")
 st.write(f"{accuracy*100:.2f}%")
 
-# Show confusion matrix
 st.subheader("Confusion Matrix")
 cm_df = pd.DataFrame(cm)
 st.dataframe(cm_df)
 
 # User input for prediction
 st.subheader("Enter Flower Measurements")
-
 sepal_length = st.number_input("Sepal Length")
 sepal_width = st.number_input("Sepal Width")
 petal_length = st.number_input("Petal Length")
 petal_width = st.number_input("Petal Width")
 
-# Prediction button
 if st.button("Predict"):
     prediction = model.predict([[sepal_length,sepal_width,petal_length,petal_width]])
     st.success(f"Predicted Flower: {prediction[0]}")
