@@ -1,8 +1,8 @@
-import streamlit as st
+import os
 import pickle
 
-model = pickle.load(open("model.pkl","rb"))
-
+model_path = os.path.join(os.path.dirname(__file__), "model.pkl")
+model = pickle.load(open(model_path, "rb"))
 st.title("Iris Flower Prediction")
 
 sepal_length = st.number_input("Sepal Length")
