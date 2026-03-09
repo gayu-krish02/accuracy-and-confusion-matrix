@@ -16,3 +16,15 @@ if st.button("Predict"):
     prediction = model.predict([[sepal_length,sepal_width,petal_length,petal_width]])
 
     st.success(f"Predicted Flower: {prediction[0]}")
+    from sklearn.metrics import accuracy_score, confusion_matrix
+
+y_pred = model.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+
+st.subheader("Model Accuracy")
+st.write(accuracy)
+
+st.subheader("Confusion Matrix")
+st.write(cm)
